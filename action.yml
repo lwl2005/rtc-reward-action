@@ -1,0 +1,45 @@
+name: 'RTC Reward Action'
+description: 'Automatically award RTC tokens when a pull request is merged'
+author: 'lwl2005'
+branding:
+  icon: 'check-circle'
+  color: 'green'
+
+inputs:
+  node-url:
+    description: 'RustChain node URL'
+    required: false
+    default: 'https://50.28.86.131'
+  amount:
+    description: 'Amount of RTC to award per merged PR'
+    required: true
+    default: '5'
+  wallet-from:
+    description: 'Source wallet name for funding the reward'
+    required: true
+  admin-key:
+    description: 'Admin key for signing the RTC transfer'
+    required: true
+  wallet-path:
+    description: 'Path to contributor wallet file in PR body or repo (.rtc-wallet)'
+    required: false
+    default: '.rtc-wallet'
+  dry-run:
+    description: 'Run in dry-run mode (no actual transfer)'
+    required: false
+    default: 'false'
+
+outputs:
+  wallet:
+    description: 'Contributor wallet that received the reward'
+    value: \${{ steps.reward.outputs.wallet }}
+  amount:
+    description: 'Amount of RTC awarded'
+    value: \${{ steps.reward.outputs.amount }}
+  tx-id:
+    description: 'Transaction ID of the reward transfer'
+    value: \${{ steps.reward.outputs.tx-id }}
+
+runs:
+  using: 'node20'
+  main: 'dist/index.js'
